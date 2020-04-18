@@ -7,13 +7,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public string[] Minigames;
-
     private Minigame activeMinigame;
 
-    private string activeSceneName;
+    private MinigameBag minigameBag = new MinigameBag();
 
-    private List<string> bagOfGames;
+    private string activeSceneName;
 
     void Start()
     {
@@ -26,8 +24,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-
-        bagOfGames = new List<string>();
     }
 
     public void SetActiveMinigame(Minigame game)
@@ -40,18 +36,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void LoadRandomScene()
     {
-        var selectedGame = PopMinigame();
+        var selectedGame = minigameBag.PopMinigame();
+        LoadScene(selectedGame);
+    }
 
-        if (activeSceneName == selectedGame)
-        {
-            var returningGame = selectedGame;
-
-            selectedGame = PopMinigame();
-            
-            bagOfGames.Add(returningGame);
-        }
-
-        StartCoroutine(LoadSceneAsync(selectedGame));
+    public void LoadScene(string minigameName)
+    {
+        StartCoroutine(LoadSceneAsync(minigameName));
     }
 
     IEnumerator LoadSceneAsync(string sceneName)
@@ -70,22 +61,35 @@ public class GameManager : MonoBehaviour
         //set active scene name
         activeSceneName = sceneName;
     }
+}
 
-    string PopMinigame()
+public class MinigameBag 
+{
+    public static string[] Minigames = {
+        "Empty Minigame",
+    };
+
+    private List<string> bagOfGames = new List<string>();
+
+    public string PopMinigame()
     {
         if (bagOfGames.Count == 0)
         {
-            LoadBag();
+            RefillBag();
+            if (bagOfGames.Count == 0) {
+                Debug.LogError("There are no minigames in the list!");
+                return;
+            }
         }
-        
-        var index = Random.Range(0, bagOfGames.Count);
+        Debug.Log(bagOfGames);
+        var index = Random.Range(0, bagOfGames.Count - 1);
         var selected = bagOfGames[index];
         bagOfGames.Remove(selected);
         return selected;
     }
 
-    void LoadBag()
+    private void RefillBag()
     {
-        bagOfGames.AddRange(Minigames);
+        bagOfGames.AddRange(MinigameBag.Minigames);
     }
 }
