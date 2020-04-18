@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CrawlingBaby : MonoBehaviour
 {
-
     public MovingObject BabyObject;
 
     private int difficulty = 1;

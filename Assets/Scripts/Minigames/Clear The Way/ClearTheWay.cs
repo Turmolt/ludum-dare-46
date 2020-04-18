@@ -2,30 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearTheWay : Minigame
+namespace CheeseTeam
 {
-    private DraggableObject grabbedObject;
-
-
-
-    void Update()
+    public class ClearTheWay : Minigame
     {
-        if (Input.GetMouseButtonDown(0))
+        private DraggableObject grabbedObject;
+
+        void Update()
         {
-            grabbedObject = MinigameCommon.RaycastFromMouse(typeof(DraggableObject)) as DraggableObject;
-            if (grabbedObject != null)
+            if (Input.GetMouseButtonDown(0))
             {
-                
-                grabbedObject.InHand = true;
+                grabbedObject = MinigameCommon.RaycastFromMouse(typeof(DraggableObject)) as DraggableObject;
+                if (grabbedObject != null)
+                {
+
+                    grabbedObject.InHand = true;
+                }
+            }
+
+            if (Input.GetMouseButtonUp(0) && grabbedObject != null)
+            {
+                grabbedObject.InHand = false;
+                grabbedObject = null;
+
             }
         }
 
-        if (Input.GetMouseButtonUp(0)&&grabbedObject!=null)
-        {
-            grabbedObject.InHand = false;
-            grabbedObject = null;
-
-        }
     }
 
 }
