@@ -7,9 +7,12 @@ using UnityEngine.SceneManagement;
 
 public abstract class Minigame : MonoBehaviour
 {
+
+    public enum MinigameState { Start, Gameplay, Paused, End }
+
     void Awake()
     {
-        GameManager.instance.SetActiveMinigame(this);
+        GameManager.instance?.SetActiveMinigame(this);
     }
 
     protected int difficulty;
