@@ -6,27 +6,35 @@ public class CrawlingBaby : MonoBehaviour
 {
     public MovingObject BabyObject;
 
-    private int difficulty = 1;
+    private List<GameObject> dangerObjects;
 
-    public float Radius = 3f;
+    private float radius = .75f;
 
-    public void Setup()
+    public void Setup(int difficulty, List<GameObject> objects)
     {
+        BabyObject.OnDestinationReached = InstructBaby;
+        dangerObjects = objects;
         BabyObject.ResetPosition();
         transform.eulerAngles = transform.eulerAngles.xy(Random.Range(0f, 360f));
-        BabyObject.StartMoving(difficulty++);
+        BabyObject.StartMoving(difficulty, RandomDangerousObjectPosition());
     }
 
-    void Update()
+    public void InstructBaby()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Setup();
-        }
+        BabyObject.SetTarget(RandomDangerousObjectPosition());
     }
+
+    Vector3 RandomDangerousObjectPosition()
+    {
+        return dangerObjects[Random.Range(0, dangerObjects.Count)].transform.position.xy(BabyObject.transform.position.z);
+    }
+
+    bool CloseToDanger() => Physics.CheckSphere(BabyObject.transform.position, radius, LayerMask.GetMask("Interactables"));
 
     void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(BabyObject.transform.position,Radius);
+        Gizmos.color = CloseToDanger() ? Color.red : Color.green;
+        Gizmos.DrawWireSphere(BabyObject.transform.position,radius);
     }
 }
+

@@ -19,6 +19,8 @@ public class MovingObject : MonoBehaviour
 
     private Camera cam;
 
+    public Action OnDestinationReached;
+
     void Start()
     {
         cam = Camera.main;
@@ -26,21 +28,22 @@ public class MovingObject : MonoBehaviour
 
     public void ResetPosition()
     {
-        transform.position = Vector3.zero;
-        SetRandomTarget();
+        transform.position = MinigameCommon.RandomPointOnScreen(cam,.25f).xy();
         moving = false;
     }
 
-    void SetRandomTarget()
+    public void StartMoving(int difficulty, Vector3 target)
     {
-        targetPosition = cam.ScreenToWorldPoint(new Vector3(Random.Range(.1f, .9f) * Screen.width, Random.Range(.1f, .9f) * Screen.height, 1f)).xy(transform.position.z);
-    }
-
-    public void StartMoving(int difficulty)
-    {
+        targetPosition = target;
         moving = true;
         speed = Mathf.Clamp(BaseSpeed+(.1f*difficulty), BaseSpeed,BaseSpeed*2f);
     }
+
+    public void SetTarget(Vector3 target) => targetPosition = target;
+    
+
+    public void StopMoving() => moving = false;
+    
 
     public void Update()
     {
@@ -50,7 +53,8 @@ public class MovingObject : MonoBehaviour
             transform.LookAt(targetPosition);
             if (transform.position == targetPosition)
             {
-                SetRandomTarget();
+                if (OnDestinationReached == null) moving = false;
+                else OnDestinationReached.Invoke();
             }
         }
     }

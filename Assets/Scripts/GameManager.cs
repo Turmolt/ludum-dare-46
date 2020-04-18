@@ -68,7 +68,7 @@ namespace CheeseTeam
     public class MinigameBag
     {
         public static string[] Minigames = {
-        "Empty Minigame",
+        "Clear The Way",
         };
 
         private List<string> bagOfGames = new List<string>();

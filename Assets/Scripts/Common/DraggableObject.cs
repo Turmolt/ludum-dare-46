@@ -31,8 +31,13 @@ public class DraggableObject : MonoBehaviour
 
     private Vector3 TargetPosition()
     {
-        var worldMouse = cam.ScreenToWorldPoint(Input.mousePosition.xy(1.0f));
-
+        var worldMouse = cam.ScreenToWorldPoint(ClampedMouse());
         return new Vector3(lockX ? transform.position.x : worldMouse.x, lockY ? transform.position.y : worldMouse.y, lockZ ? transform.position.z : worldMouse.z);
+    }
+
+    Vector3 ClampedMouse()
+    {
+        var mousePos = Input.mousePosition;
+        return new Vector3(Mathf.Clamp(mousePos.x,0,Screen.width), Mathf.Clamp(mousePos.y, 0, Screen.height), 1f);
     }
 }
