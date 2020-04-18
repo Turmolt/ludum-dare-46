@@ -1,6 +1,13 @@
 {
     "files.exclude": {
-        "**/*.meta": true
+        "**/*.*.meta": true,
+        "**/*.meta": true,
+        "**/*.prefab": true,
+        "**/*.unity": true,
+        "**/*.unityproj": true,
+        "**/Library": true,
+        "**/ProjectSettings": true,
+        "**/Temp": true
     },
     "search.exclude": {
         "**/*.meta": true
