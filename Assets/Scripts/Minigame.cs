@@ -5,27 +5,30 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public abstract class Minigame : MonoBehaviour
+namespace CheeseTeam
 {
-
-    public enum MinigameState { Start, Gameplay, Paused, End }
-
-    void Awake()
+    public abstract class Minigame : MonoBehaviour
     {
-        GameManager.instance?.SetActiveMinigame(this);
-    }
 
-    protected int difficulty;
+        public enum MinigameState { Start, Gameplay, Paused, End }
 
-    public virtual void Setup(int difficulty) => this.difficulty = difficulty;
+        void Awake()
+        {
+            GameManager.instance?.SetActiveMinigame(this);
+        }
 
-    public virtual void StartGame(){}
+        protected int difficulty;
 
-    public virtual void Pause() { }
+        public virtual void Setup(int difficulty) => this.difficulty = difficulty;
 
-    public virtual void Cleanup() { }
+        public virtual void StartGame() { }
 
-    public Action OnGameWin { get; set; }
+        public virtual void Pause() { }
 
-    public Action OnGameLose { get; set; }
+        public virtual void Cleanup() { }
+
+        public Action OnGameWin { get; set; }
+
+        public Action OnGameLose { get; set; }
+    } 
 }

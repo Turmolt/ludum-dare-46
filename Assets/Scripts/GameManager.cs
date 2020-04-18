@@ -3,89 +3,92 @@ using Boo.Lang;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+namespace CheeseTeam
 {
-    public static GameManager instance;
-
-    public string[] Minigames;
-
-    private Minigame activeMinigame;
-
-    private string activeSceneName;
-
-    private List<string> bagOfGames;
-
-    void Start()
+    public class GameManager : MonoBehaviour
     {
-        if (instance == null)
+        public static GameManager instance;
+
+        public static string[] Minigames = {"Empty Minigame",};
+
+        private Minigame activeMinigame;
+
+        private string activeSceneName;
+
+        private List<string> bagOfGames;
+
+        void Start()
         {
-            DontDestroyOnLoad(this.gameObject);
-            instance = this;
-        }
-        else if(instance!=this)
-        {
-            Destroy(this.gameObject);
-        }
+            if (instance == null)
+            {
+                DontDestroyOnLoad(this.gameObject);
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                Destroy(this.gameObject);
+            }
 
-        bagOfGames = new List<string>();
-    }
-
-    public void SetActiveMinigame(Minigame game)
-    {
-        this.activeMinigame = game;
-    }
-
-    /// <summary>
-    /// Pulls random scene from MinigameScenes and loads it
-    /// </summary>
-    public void LoadRandomScene()
-    {
-        var selectedGame = PopMinigame();
-
-        if (activeSceneName == selectedGame)
-        {
-            var returningGame = selectedGame;
-
-            selectedGame = PopMinigame();
-            
-            bagOfGames.Add(returningGame);
+            bagOfGames = new List<string>();
         }
 
-        StartCoroutine(LoadSceneAsync(selectedGame));
-    }
-
-    IEnumerator LoadSceneAsync(string sceneName)
-    {
-        //unload previous scene if there is one
-        if (!string.IsNullOrEmpty(activeSceneName))
+        public void SetActiveMinigame(Minigame game)
         {
-            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(activeSceneName);
-            yield return new WaitUntil(()=>asyncUnload.isDone);
+            this.activeMinigame = game;
         }
 
-        //load next scene
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-        yield return new WaitUntil(()=>asyncLoad.isDone);
-
-        //set active scene name
-        activeSceneName = sceneName;
-    }
-
-    string PopMinigame()
-    {
-        if (bagOfGames.Count == 0)
+        /// <summary>
+        /// Pulls random scene from MinigameScenes and loads it
+        /// </summary>
+        public void LoadRandomScene()
         {
-            LoadBag();
-        }
-        
-        var index = Random.Range(0, bagOfGames.Count);
-        var selected = bagOfGames[index];
-        bagOfGames.Remove(selected);
-        return selected;
-    }
+            var selectedGame = PopMinigame();
 
-    void LoadBag()
-    {
-        bagOfGames.AddRange(Minigames);
-    }
+            if (activeSceneName == selectedGame)
+            {
+                var returningGame = selectedGame;
+
+                selectedGame = PopMinigame();
+
+                bagOfGames.Add(returningGame);
+            }
+
+            StartCoroutine(LoadSceneAsync(selectedGame));
+        }
+
+        IEnumerator LoadSceneAsync(string sceneName)
+        {
+            //unload previous scene if there is one
+            if (!string.IsNullOrEmpty(activeSceneName))
+            {
+                AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(activeSceneName);
+                yield return new WaitUntil(() => asyncUnload.isDone);
+            }
+
+            //load next scene
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+            yield return new WaitUntil(() => asyncLoad.isDone);
+
+            //set active scene name
+            activeSceneName = sceneName;
+        }
+
+        string PopMinigame()
+        {
+            if (bagOfGames.Count == 0)
+            {
+                LoadBag();
+            }
+
+            var index = Random.Range(0, bagOfGames.Count);
+            var selected = bagOfGames[index];
+            bagOfGames.Remove(selected);
+            return selected;
+        }
+
+        void LoadBag()
+        {
+            bagOfGames.AddRange(Minigames);
+        }
+    } 
 }
