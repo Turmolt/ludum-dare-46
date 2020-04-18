@@ -62,6 +62,29 @@ namespace CheeseTeam
 
             //set active scene name
             activeSceneName = sceneName;
+
+            // Extract minigame class from loaded objects
+            Minigame minigame = (Minigame)FindObjectOfType(typeof(Minigame));
+            if (minigame)
+            {
+                activeMinigame = minigame;
+                // Subscribe to game events
+                minigame.OnGameWin += OnMinigameWon;
+                minigame.OnGameLose += OnMinigameLost;
+            }
+            else 
+            {
+                Debug.LogError("No minigame was found!!");
+            }
+
+        }
+
+        void OnMinigameWon() {
+
+        }
+
+        void OnMinigameLost() {
+
         }
     }
 

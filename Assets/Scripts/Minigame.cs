@@ -18,6 +18,7 @@ namespace CheeseTeam
         }
 
         protected int difficulty;
+        protected float timeLimit;
 
         public virtual void Setup(int difficulty) => this.difficulty = difficulty;
 
