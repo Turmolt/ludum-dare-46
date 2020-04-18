@@ -26,12 +26,6 @@ public class MovingObject : MonoBehaviour
         cam = Camera.main;
     }
 
-    public void ResetPosition()
-    {
-        transform.position = MinigameCommon.RandomPointOnScreen(cam,.25f).xy();
-        moving = false;
-    }
-
     public void StartMoving(int difficulty, Vector3 target)
     {
         targetPosition = target;

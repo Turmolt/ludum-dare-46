@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CrawlingBaby : MonoBehaviour
 {
@@ -10,13 +12,35 @@ public class CrawlingBaby : MonoBehaviour
 
     private float radius = .75f;
 
-    public void Setup(int difficulty, List<GameObject> objects)
+    private int difficulty;
+
+    public Action OnDangerousObjectGrabbed;
+
+    private Camera cam;
+
+    private bool isPlaying = false;
+
+    public void Setup(int difficulty, List<GameObject> objects, Vector3 startPosition)
     {
+        if (cam == null) cam = Camera.main;
+        isPlaying = false;
+        this.difficulty = difficulty;
         BabyObject.OnDestinationReached = InstructBaby;
         dangerObjects = objects;
-        BabyObject.ResetPosition();
-        transform.eulerAngles = transform.eulerAngles.xy(Random.Range(0f, 360f));
+        BabyObject.StopMoving();
+        BabyObject.transform.position = startPosition;
+    }
+
+    public void StartMoving()
+    {
+        isPlaying = true;
         BabyObject.StartMoving(difficulty, RandomDangerousObjectPosition());
+    }
+
+
+    void Update()
+    {
+        if(CloseToDanger()&&isPlaying) OnDangerousObjectGrabbed?.Invoke();
     }
 
     public void InstructBaby()
@@ -30,6 +54,7 @@ public class CrawlingBaby : MonoBehaviour
     }
 
     bool CloseToDanger() => Physics.CheckSphere(BabyObject.transform.position, radius, LayerMask.GetMask("Interactables"));
+
 
     void OnDrawGizmos()
     {

@@ -19,26 +19,41 @@ namespace CheeseTeam
 
         private Camera cam;
 
+        private bool isPlaying = false;
+
         public override void Setup(int difficulty)
         {
             if (cam == null) cam = Camera.main;
-            
-            SpawnObjects();
-            Baby.Setup(difficulty, dangerousObjects);
+
+            isPlaying = false;
+            Vector3 babyStart = MinigameCommon.RandomPointOnScreen(cam, .25f).xy(Baby.BabyObject.transform.position.z);
+            SpawnObjects(babyStart);
+            Baby.Setup(difficulty, dangerousObjects, babyStart);
+            Baby.OnDangerousObjectGrabbed = GameLost;
             base.Setup(difficulty);
         }
 
+        void GameLost()
+        {
+            if (!isPlaying) return;
+            Debug.Log(Time.time + " " + isPlaying);
+            isPlaying = false;
+            OnGameLose?.Invoke();
+        }
+
+        public override void StartGame()
+        {
+
+            Baby.StartMoving();
+            Invoke("EnablePlaying",.1f);
+            base.StartGame();
+        }
+
+        void EnablePlaying() => isPlaying = true;
 
         void Update()
         {
-            
             HandleMouse();
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Setup(1);
-            }
-
         }
 
         void HandleMouse()
@@ -60,7 +75,7 @@ namespace CheeseTeam
             }
         }
 
-        void SpawnObjects()
+        void SpawnObjects(Vector3 babyStart)
         {
             int numberOfObjects = (int)(baseNumber + (difficulty / 3.0f)), num = dangerousObjects.Count, difference = numberOfObjects- dangerousObjects.Count;
         
@@ -68,21 +83,21 @@ namespace CheeseTeam
             {
                 var needAdditional = (i < difference);
                 GameObject newObject = needAdditional ? Instantiate(DangerousObjectPrefabs[Random.Range(0, DangerousObjectPrefabs.Length)], DangerObjectParent.transform) : dangerousObjects[i];
-                newObject.transform.position = RandomDangerObjectPosition(i);
+                newObject.transform.position = RandomDangerObjectPosition(babyStart);
                 newObject.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
                 if(needAdditional) dangerousObjects.Add(newObject);
             }
         
         }
 
-        Vector3 RandomDangerObjectPosition(int n)
+        Vector3 RandomDangerObjectPosition(Vector3 babyPosition)
         {
             var point = MinigameCommon.RandomPointOnScreen(cam, 0f);
             point.z = Baby.BabyObject.transform.position.z;
-            var moveAwayDist = babyBuffer - Vector3.Distance(Baby.BabyObject.transform.position, point);
+            var moveAwayDist = babyBuffer - Vector3.Distance(babyPosition, point);
             if (moveAwayDist > 0f)
             {
-                var movement = Vector3.Normalize(Baby.BabyObject.transform.position - point) * (moveAwayDist + Random.Range(0f, 2f));
+                var movement = Vector3.Normalize(babyPosition - point) * (moveAwayDist + Random.Range(0f, 2f));
                 point -= movement;
             }
             return point;

@@ -15,6 +15,8 @@ namespace CheeseTeam
 
         private string activeSceneName;
 
+        private int difficulty = 1;
+
         void Start()
         {
             if (instance == null)
@@ -26,11 +28,8 @@ namespace CheeseTeam
             {
                 Destroy(this.gameObject);
             }
-        }
 
-        public void SetActiveMinigame(Minigame game)
-        {
-            this.activeMinigame = game;
+            activeSceneName = string.Empty;
         }
 
         /// <summary>
@@ -49,15 +48,9 @@ namespace CheeseTeam
 
         IEnumerator LoadSceneAsync(string sceneName)
         {
-            //unload previous scene if there is one
-            if (!string.IsNullOrEmpty(activeSceneName))
-            {
-                AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(activeSceneName);
-                yield return new WaitUntil(() => asyncUnload.isDone);
-            }
-
+            
             //load next scene
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
             yield return new WaitUntil(() => asyncLoad.isDone);
 
             //set active scene name
@@ -71,6 +64,10 @@ namespace CheeseTeam
                 // Subscribe to game events
                 minigame.OnGameWin += OnMinigameWon;
                 minigame.OnGameLose += OnMinigameLost;
+
+                minigame.Setup(difficulty++);
+                //TODO: Fade from intermittent screen then
+                minigame.StartGame();
             }
             else 
             {
@@ -80,11 +77,11 @@ namespace CheeseTeam
         }
 
         void OnMinigameWon() {
-
+            
         }
 
         void OnMinigameLost() {
-
+            LoadRandomScene();
         }
     }
 
