@@ -62,7 +62,7 @@ namespace CheeseTeam {
                     }
                 }
                 var dragZone = MakeDragZone(desiredTag, pos);
-                dragZone.gameObject.AttachSprite(dragZoneTextures[0], 2f);
+                dragZone.gameObject.AttachSprite(dragZoneTextures[0], 1f);
                 dragZones.Add(dragZone);
             }
         }
