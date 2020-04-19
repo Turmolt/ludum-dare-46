@@ -5,6 +5,8 @@ using UnityEngine;
 namespace CheeseTeam {
     public class OperationMinigame : Minigame {
 
+        private bool isPlaying = true;
+
         public int maxSpawnedOrgans = 5;
         public float organScale = 1.0f;
         public float interOrganSpacing = 0.125f;
@@ -33,7 +35,8 @@ namespace CheeseTeam {
             base.StartGame();
 
             for (int i = 0; i < maxSpawnedOrgans; i++) {
-                var desiredTag = "Organ " + i.ToString();
+                var organIndex = UnityEngine.Random.Range(0, organTextures.Length - 1);
+                var desiredTag = "Organ " + organIndex.ToString();
 
                 // Create organ
                 var organ = MakeOrgan(desiredTag, new Vector3(
@@ -42,7 +45,7 @@ namespace CheeseTeam {
                     organSpawnCenter.position.z
                 ));
                 organ.transform.localScale = new Vector3(organScale, organScale, organScale);
-                organ.gameObject.AttachSprite(organTextures[0], 2f);
+                organ.gameObject.AttachSprite(organTextures[organIndex], 50);
                 organs.Add(organ);
 
                 // Create drag zone for organ
@@ -51,7 +54,7 @@ namespace CheeseTeam {
                 while (true) {
                     var hasCollision = false;
                     foreach (var zone in dragZones) {
-                        if (Vector3.Distance(zone.transform.position, pos) < 1.5f) {
+                        if (Vector3.Distance(zone.transform.position, pos) < 1.414f) {
                             hasCollision = true;
                         }
                     }
@@ -62,7 +65,7 @@ namespace CheeseTeam {
                     }
                 }
                 var dragZone = MakeDragZone(desiredTag, pos);
-                dragZone.gameObject.AttachSprite(dragZoneTextures[0], 1f);
+                dragZone.gameObject.AttachSprite(dragZoneTextures[organIndex], 40);
                 dragZones.Add(dragZone);
             }
         }
@@ -78,6 +81,20 @@ namespace CheeseTeam {
             if (Input.GetMouseButtonUp(0) && grabbedObject != null) {
                 grabbedObject.InHand = false;
                 grabbedObject = null;
+            }
+
+            if (Input.GetMouseButtonUp(0)) {
+                // Check if all organs are in the right spots
+                var correct = 0;
+                foreach(DragZone zone in dragZones) {
+                    if (zone.hasDesiredObject)
+                        correct++;
+                }
+                if (correct == dragZones.Count && isPlaying) {
+                    isPlaying = false;
+                    Debug.Log("Game won!");
+                    OnGameWin();
+                }
             }
         }
 
