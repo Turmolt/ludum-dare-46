@@ -36,7 +36,6 @@ namespace CheeseTeam
         void GameLost()
         {
             if (!isPlaying) return;
-            Debug.Log(Time.time + " " + isPlaying);
             isPlaying = false;
             OnGameLose?.Invoke();
         }

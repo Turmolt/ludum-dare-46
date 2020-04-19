@@ -18,12 +18,9 @@ public class CrawlingBaby : MonoBehaviour
 
     private Camera cam;
 
-    private bool isPlaying = false;
-
     public void Setup(int difficulty, List<GameObject> objects, Vector3 startPosition)
     {
         if (cam == null) cam = Camera.main;
-        isPlaying = false;
         this.difficulty = difficulty;
         BabyObject.OnDestinationReached = InstructBaby;
         dangerObjects = objects;
@@ -33,14 +30,12 @@ public class CrawlingBaby : MonoBehaviour
 
     public void StartMoving()
     {
-        isPlaying = true;
         BabyObject.StartMoving(difficulty, RandomDangerousObjectPosition());
     }
 
-
     void Update()
     {
-        if(CloseToDanger()&&isPlaying) OnDangerousObjectGrabbed?.Invoke();
+        if(CloseToDanger()) OnDangerousObjectGrabbed?.Invoke();
     }
 
     public void InstructBaby()
