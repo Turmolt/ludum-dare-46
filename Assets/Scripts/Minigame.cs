@@ -15,6 +15,14 @@ namespace CheeseTeam
         protected int difficulty;
         protected float timeLimit;
 
+        public virtual void Start() {
+            // If testing the minigame in isolation, simulate events from GameManager to init
+            if (GameManager.instance == null) {
+                Setup(0);
+                StartGame();
+            }
+        }
+
         public virtual void Setup(int difficulty) => this.difficulty = difficulty;
 
         public virtual void StartGame() { }

@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CheeseTeam{
-    
+namespace CheeseTeam {
     public class OperationMinigame : Minigame {
 
         public GameObject organPrefab;
         private DraggableObject grabbedObject;
-
         private List<Organ> organs = new List<Organ>();
 
         public override void StartGame() {
@@ -16,11 +14,6 @@ namespace CheeseTeam{
                 var organ = MakeOrgan("Organ " + i.ToString(), Vector3.zero);
                 organs.Add(organ);
             }
-        }
-
-        void Start() {
-            // TODO: Remove
-            StartGame();
         }
 
         void Update() {
@@ -45,5 +38,4 @@ namespace CheeseTeam{
         }
 
     }
-
 }
