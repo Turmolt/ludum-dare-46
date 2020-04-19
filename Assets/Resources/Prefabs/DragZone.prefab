@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1486352522469832809}
   - component: {fileID: 4493674801095111773}
   - component: {fileID: 5449166120220905184}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DragZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}

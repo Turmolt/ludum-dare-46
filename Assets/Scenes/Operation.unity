@@ -214,11 +214,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4493674801095111773, guid: 73a8cfcd39139424cb59f032ed3feda8,
-        type: 3}
-      propertyPath: desiredObjectTag
-      value: test
-      objectReference: {fileID: 0}
     - target: {fileID: 6265652550925048692, guid: 73a8cfcd39139424cb59f032ed3feda8,
         type: 3}
       propertyPath: m_Name
@@ -412,6 +407,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!1 &400548479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400548480}
+  m_Layer: 0
+  m_Name: Drag Zone Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400548480
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400548479}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1557297046
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +468,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   organPrefab: {fileID: 8153949942434876404, guid: ecc53e6de6cae4bcfb1530dec63a8300,
     type: 3}
+  dragZonePrefab: {fileID: 6265652550925048692, guid: 73a8cfcd39139424cb59f032ed3feda8,
+    type: 3}
+  organSpawnCenter: {fileID: 400548480}
+  dragZoneSpawnCenter: {fileID: 400548480}
+  dragZoneSpawnRange: {x: 0, y: 0}
 --- !u!4 &1557297048
 Transform:
   m_ObjectHideFlags: 0
