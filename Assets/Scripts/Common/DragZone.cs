@@ -45,8 +45,6 @@ public class DragZone : MonoBehaviour
             tags.Remove(dragTag.id);
         }
 
-        Debug.Log(desiredObjectTag);
-
         hasDesiredObject = tags.Contains(desiredObjectTag);
         if (dragTag.id == desiredObjectTag)
             DesiredTagExited?.Invoke(dragTag.id);
