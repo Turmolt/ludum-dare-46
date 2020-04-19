@@ -77,7 +77,7 @@ namespace CheeseTeam
         }
 
         void OnMinigameWon() {
-            
+            LoadRandomScene();
         }
 
         void OnMinigameLost() {
@@ -88,7 +88,8 @@ namespace CheeseTeam
     public class MinigameBag
     {
         public static string[] Minigames = {
-        "Clear The Way",
+        // "Clear The Way",
+        "Operation",
         };
 
         private List<string> bagOfGames = new List<string>();
