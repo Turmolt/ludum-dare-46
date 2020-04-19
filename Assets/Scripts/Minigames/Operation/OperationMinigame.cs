@@ -18,6 +18,11 @@ namespace CheeseTeam{
             }
         }
 
+        void Start() {
+            // TODO: Remove
+            StartGame();
+        }
+
         void Update() {
             if (Input.GetMouseButtonDown(0)) {
                 grabbedObject = MinigameCommon.RaycastFromMouse(typeof(DraggableObject)) as DraggableObject;
