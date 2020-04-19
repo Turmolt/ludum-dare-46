@@ -48,8 +48,7 @@ public class CrawlingBaby : MonoBehaviour
         return dangerObjects[Random.Range(0, dangerObjects.Count)].transform.position.xy(BabyObject.transform.position.z);
     }
 
-    bool CloseToDanger() => Physics.CheckSphere(BabyObject.transform.position, radius, LayerMask.GetMask("Interactables"));
-
+    bool CloseToDanger() => Physics.CheckSphere(BabyObject.transform.position, radius, LayerMask.GetMask("Targetables"));
 
     void OnDrawGizmos()
     {

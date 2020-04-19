@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Clear The Way.unity
     guid: 9c10276ecb40ef442a4f3ddf751949eb
+  - enabled: 1
+    path: Assets/Scenes/Tight Rope.unity
+    guid: cc6651000470daa4e931eeb280823afb
   m_configObjects: {}
