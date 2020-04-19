@@ -19,6 +19,10 @@ namespace CheeseTeam {
         public Transform dragZoneSpawnCenter;
         public Vector2 dragZoneSpawnRange;
 
+        public Sprite[] organTextures;
+        public Sprite[] dragZoneTextures;
+
+
         public override void Setup(int difficulty) {
             base.Setup(difficulty);
             organs = new List<Organ>();
@@ -38,6 +42,7 @@ namespace CheeseTeam {
                     organSpawnCenter.position.z
                 ));
                 organ.transform.localScale = new Vector3(organScale, organScale, organScale);
+                organ.gameObject.AttachSprite(organTextures[0], 2f);
                 organs.Add(organ);
 
                 // Create drag zone for organ
@@ -57,6 +62,7 @@ namespace CheeseTeam {
                     }
                 }
                 var dragZone = MakeDragZone(desiredTag, pos);
+                dragZone.gameObject.AttachSprite(dragZoneTextures[0], 2f);
                 dragZones.Add(dragZone);
             }
         }
