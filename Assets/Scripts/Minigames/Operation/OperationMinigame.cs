@@ -32,14 +32,11 @@ namespace CheeseTeam {
             base.Setup(difficulty);
             organs = new List<Organ>();
             dragZones = new List<DragZone>();
-            return true;
-        }
 
-        public override void StartGame() {
-            base.StartGame();
-
+            // Override cursors
             Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.ForceSoftware);
 
+            // Spawn organs and organ zones
             for (int i = 0; i < maxSpawnedOrgans; i++) {
                 var organIndex = UnityEngine.Random.Range(0, organTextures.Length - 1);
                 var desiredTag = "Organ " + organIndex.ToString();
@@ -58,10 +55,10 @@ namespace CheeseTeam {
                 var pos = MinigameCommon.RandomPointOnXYPlane(dragZoneSpawnCenter.position, dragZoneSpawnRange, 1f);
                 // Keep assigning the position until we don't collide with any other drag zones
                 int guard = 0;
-                while (guard < 1000) {
+                while (dragZones.Count > 0) {
                     var hasCollision = false;
                     foreach (var zone in dragZones) {
-                        if (Vector3.Distance(zone.transform.position, pos) < Mathf.Sqrt(2 * organScale)) {
+                        if (Vector3.Distance(zone.transform.position, pos) < (organScale / 2) * Mathf.Sqrt(2)) {
                             hasCollision = true;
                         }
                     }
@@ -71,11 +68,21 @@ namespace CheeseTeam {
                         break;
                     }
                     guard++;
+                    if (guard > 1000) {
+                        Debug.LogWarning("Guarded against infinite loop");
+                        break;
+                    }
                 }
                 var dragZone = MakeDragZone(desiredTag, pos);
                 dragZone.gameObject.AttachSprite(dragZoneTextures[organIndex], 40);
                 dragZones.Add(dragZone);
             }
+
+            return true;
+        }
+
+        public override void StartGame() {
+            base.StartGame();
         }
 
         void Update() {
@@ -128,37 +135,49 @@ namespace CheeseTeam {
         }
 
         private void OnDrawGizmos() {
-            Gizmos.color = Color.green;
+            // Draw lines representing drag zone closeness
+            if (dragZones != null) {
+                Gizmos.color = Color.green;
+                foreach (DragZone zone in dragZones) {
+                    foreach (DragZone innerZone in dragZones) {
+                        if (innerZone == zone) continue;
+                        Gizmos.color = Vector3.Distance(zone.transform.position, innerZone.transform.position) >= (organScale / 2) * Mathf.Sqrt(2) ? Color.green : Color.red;
+                        Gizmos.DrawLine(zone.transform.position, innerZone.transform.position);
+                    }
+                }
+            }
 
             // Draw drag zone spawn area
-            if (dragZoneSpawnCenter == null || dragZoneSpawnRange == null)
-                return;
-            var zonePos = dragZoneSpawnCenter.position;
-            MinigameCommon.DrawGizmoBox(
-                new Vector3(zonePos.x + -dragZoneSpawnRange.x, zonePos.y + -dragZoneSpawnRange.y, 0f),
-                new Vector3(zonePos.x +  dragZoneSpawnRange.x, zonePos.y + -dragZoneSpawnRange.y, 0f),
-                new Vector3(zonePos.x +  dragZoneSpawnRange.x, zonePos.y +  dragZoneSpawnRange.y, 0f),
-                new Vector3(zonePos.x + -dragZoneSpawnRange.x, zonePos.y +  dragZoneSpawnRange.y, 0f)
-            );
+            if (dragZoneSpawnCenter != null || dragZoneSpawnRange != null) {
+                Gizmos.color = Color.green;
+                var zonePos = dragZoneSpawnCenter.position;
+                MinigameCommon.DrawGizmoBox(
+                    new Vector3(zonePos.x + -dragZoneSpawnRange.x, zonePos.y + -dragZoneSpawnRange.y, 0f),
+                    new Vector3(zonePos.x +  dragZoneSpawnRange.x, zonePos.y + -dragZoneSpawnRange.y, 0f),
+                    new Vector3(zonePos.x +  dragZoneSpawnRange.x, zonePos.y +  dragZoneSpawnRange.y, 0f),
+                    new Vector3(zonePos.x + -dragZoneSpawnRange.x, zonePos.y +  dragZoneSpawnRange.y, 0f)
+                );
+            }
 
             // Draw organ spawn area
-            if (organSpawnCenter == null)
-                return;
-            var organPos = organSpawnCenter.position;
-            MinigameCommon.DrawGizmoBox(
-                new Vector3(organPos.x + -0.5f, organPos.y + -maxSpawnedOrgans + 0.5f - (interOrganSpacing * (maxSpawnedOrgans - 1)), 0f),
-                new Vector3(organPos.x +  0.5f, organPos.y + -maxSpawnedOrgans + 0.5f - (interOrganSpacing * (maxSpawnedOrgans - 1)), 0f),
-                new Vector3(organPos.x +  0.5f, organPos.y +  0.5f,                    0f),
-                new Vector3(organPos.x + -0.5f, organPos.y +  0.5f,                    0f)
-            );
-            // Draw organs in spawn area
-            for (int i = 0; i < maxSpawnedOrgans; i++) {
-                var pos = new Vector3(
-                    organSpawnCenter.position.x,
-                    organSpawnCenter.position.y - i - (interOrganSpacing * i),
-                    organSpawnCenter.position.z
+            if (organSpawnCenter != null) {
+                Gizmos.color = Color.green;
+                var organPos = organSpawnCenter.position;
+                MinigameCommon.DrawGizmoBox(
+                    new Vector3(organPos.x + -0.5f, organPos.y + -maxSpawnedOrgans + 0.5f - (interOrganSpacing * (maxSpawnedOrgans - 1)), 0f),
+                    new Vector3(organPos.x +  0.5f, organPos.y + -maxSpawnedOrgans + 0.5f - (interOrganSpacing * (maxSpawnedOrgans - 1)), 0f),
+                    new Vector3(organPos.x +  0.5f, organPos.y +  0.5f,                    0f),
+                    new Vector3(organPos.x + -0.5f, organPos.y +  0.5f,                    0f)
                 );
-                Gizmos.DrawWireSphere(pos, organScale / 2);
+                // Draw organs in spawn area
+                for (int i = 0; i < maxSpawnedOrgans; i++) {
+                    var pos = new Vector3(
+                        organSpawnCenter.position.x,
+                        organSpawnCenter.position.y - i - (interOrganSpacing * i),
+                        organSpawnCenter.position.z
+                    );
+                    Gizmos.DrawWireSphere(pos, organScale / 2 / 2);
+                }
             }
 
         }
