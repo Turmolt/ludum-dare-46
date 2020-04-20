@@ -77,7 +77,7 @@ namespace CheeseTeam
         }
 
         void OnMinigameWon() {
-            
+            LoadRandomScene();
         }
 
         void OnMinigameLost() {
