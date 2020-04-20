@@ -12,6 +12,8 @@ namespace CheeseTeam {
         public float organScale = 1.0f;
         public float interOrganSpacing = 0.125f;
 
+        public Texture2D mouseCursor;
+
         public GameObject organPrefab;
         public GameObject dragZonePrefab;
         private DraggableObject grabbedObject;
@@ -35,6 +37,8 @@ namespace CheeseTeam {
 
         public override void StartGame() {
             base.StartGame();
+
+            Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.Auto);
 
             for (int i = 0; i < maxSpawnedOrgans; i++) {
                 var organIndex = UnityEngine.Random.Range(0, organTextures.Length - 1);
@@ -100,6 +104,10 @@ namespace CheeseTeam {
                     OnGameWin();
                 }
             }
+        }
+
+        void OnDestroy() {
+            Cursor.SetCursor(null, Vector3.zero, CursorMode.Auto);
         }
 
         Organ MakeOrgan(string name, Vector3 pos) {
