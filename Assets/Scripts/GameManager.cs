@@ -37,8 +37,11 @@ namespace CheeseTeam
         /// </summary>
         public void LoadRandomScene()
         {
-            var selectedGame = minigameBag.PopMinigame();
-            LoadScene(selectedGame);
+            LoadingScreen.instance.FadeScreen(true,1f,()=>
+            {
+                var selectedGame = minigameBag.PopMinigame();
+                LoadScene(selectedGame);
+            });
         }
 
         public void LoadScene(string minigameName)
@@ -66,8 +69,7 @@ namespace CheeseTeam
                 minigame.OnGameLose += OnMinigameLost;
                 //minigame.Setup(difficulty++);
                 yield return new WaitUntil(()=>minigame.Setup(difficulty++));
-                //TODO: Fade from intermittent screen then
-                minigame.StartGame();
+                LoadingScreen.instance.FadeScreen(false,1f,minigame.StartGame);
             }
             else 
             {

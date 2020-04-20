@@ -20,8 +20,6 @@ public class CrawlingBaby : MonoBehaviour
 
     public BabyAnimator BabyAnimator;
 
-    
-
     public void Setup(int difficulty, List<GameObject> objects, Vector3 startPosition)
     {
         if (cam == null) cam = Camera.main;
