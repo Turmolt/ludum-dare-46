@@ -39,6 +39,7 @@ namespace CheeseTeam
         {
             if (!isPlaying) return;
             isPlaying = false;
+            Baby.StopMoving();
             OnGameLose?.Invoke();
         }
 

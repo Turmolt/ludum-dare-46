@@ -38,6 +38,12 @@ public class CrawlingBaby : MonoBehaviour
         BabyObject.StartMoving(difficulty, RandomDangerousObjectPosition());
     }
 
+    public void StopMoving()
+    {
+        BabyAnimator.ToggleAnimation(false);
+        BabyObject.StopMoving();
+    }
+
     void Update()
     {
         if(CloseToDanger()) OnDangerousObjectGrabbed?.Invoke();

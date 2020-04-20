@@ -38,7 +38,7 @@ namespace CheeseTeam {
         public override void StartGame() {
             base.StartGame();
 
-            Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.Auto);
+            Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.ForceSoftware);
 
             for (int i = 0; i < maxSpawnedOrgans; i++) {
                 var organIndex = UnityEngine.Random.Range(0, organTextures.Length - 1);
