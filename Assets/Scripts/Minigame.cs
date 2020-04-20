@@ -34,6 +34,8 @@ namespace CheeseTeam
 
         public virtual void Pause() { }
 
+        public virtual void TimerEnd() { }
+
         public virtual void Cleanup() { }
 
         public Action OnGameWin { get; set; }

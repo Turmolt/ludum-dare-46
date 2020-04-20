@@ -81,6 +81,12 @@ namespace CheeseTeam {
             return true;
         }
 
+        public override void TimerEnd()
+        {
+            OnGameLose?.Invoke();
+            base.TimerEnd();
+        }
+
         public override void StartGame() {
             base.StartGame();
         }

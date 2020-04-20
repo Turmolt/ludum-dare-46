@@ -27,8 +27,8 @@ namespace CheeseTeam
 
         float maxRed = .95f;
         private float minRed = .5f;
-        float maxYellow = .4f;
-        private float minYellow = .25f;
+        float maxYellow = .5f;
+        private float minYellow = .2f;
         float maxGreen = .1f;
         float minGreen = .05f;
 
@@ -52,20 +52,6 @@ namespace CheeseTeam
 
         void Update()
         {
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                difficulty++;
-                SetDifficulty();
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Setup(difficulty);
-                StartGame();
-            }
-
-
             if (!isPlaying) return;
 
             if (LifeSlider.value == 0f) GameOver();
@@ -81,22 +67,21 @@ namespace CheeseTeam
 
             }
 
-            var pullMultiplier = 2.5f;
+            var pullMultiplier = 2.0f;
 
             if (BalanceSlider.value < .5f)
             {
-                var d = (.5f - BalanceSlider.value)/(1.5f - difficulty / 30f);
+                var d = (.5f - BalanceSlider.value)/(1.75f - difficulty / 30f);
                 SetDelta(delta - d * minDelta * pullMultiplier);
             }
             else
             {
-                var d = (BalanceSlider.value - .5f) / (1.5f - difficulty/30f);
+                var d = (BalanceSlider.value - .5f) / (1.75f - difficulty/30f);
                 SetDelta(delta + d * minDelta * pullMultiplier);
             }
 
             BalanceSlider.value = Mathf.Clamp01(BalanceSlider.value + delta);
             UpdateLife();
-
         }
 
         void SetDifficulty()
@@ -113,6 +98,12 @@ namespace CheeseTeam
         }
 
         float CurrentValue() => Mathf.Abs(BalanceSlider.value - .5f);
+
+        public override void TimerEnd()
+        {
+            isPlaying = false;
+            OnGameWin?.Invoke();
+        }
 
         void UpdateLife()
         {

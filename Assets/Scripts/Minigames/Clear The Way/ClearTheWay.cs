@@ -51,6 +51,13 @@ namespace CheeseTeam
             base.StartGame();
         }
 
+        public override void TimerEnd()
+        {
+            isPlaying = false;
+            Baby.StopMoving();
+            OnGameWin();
+        }
+
         void EnablePlaying() => isPlaying = true;
 
         void Update()

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using Boo.Lang;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace CheeseTeam
 {
@@ -17,6 +19,22 @@ namespace CheeseTeam
 
         private int difficulty = 1;
 
+        //Life Gauge
+        private int life;
+        public GameObject HeartParent;
+        public Image[] HeartImages;
+
+        //Timer Variables
+        public TextMeshProUGUI Timer;
+        private float maxTime = 10f;
+        private float currentTimer;
+
+        private bool isPlaying;
+
+        private Minigame minigame;
+
+        
+
         void Start()
         {
             if (instance == null)
@@ -29,6 +47,8 @@ namespace CheeseTeam
                 Destroy(this.gameObject);
             }
 
+            ResetLife();
+            ToggleUI(false);
             activeSceneName = string.Empty;
         }
 
@@ -37,11 +57,30 @@ namespace CheeseTeam
         /// </summary>
         public void LoadRandomScene()
         {
-            LoadingScreen.instance.FadeScreen(true,2f,()=>
+            LoadingScreen.instance.FadeScreen(true,1f,()=>
             {
+                //if we are loading our first scene, enable the UI components
+                if (string.IsNullOrEmpty(activeSceneName))
+                {
+                    ToggleUI(true);
+                }
+
                 var selectedGame = minigameBag.PopMinigame();
                 LoadScene(selectedGame);
             });
+        }
+
+        void Update()
+        {
+            if (isPlaying)
+            {
+                currentTimer -= Time.deltaTime;
+                Timer.text = Mathf.Clamp(currentTimer,0,maxTime).ToString("00");
+                if (currentTimer <=0)
+                {
+                    TimerEnd();
+                }
+            }
         }
 
         public void LoadScene(string minigameName)
@@ -60,16 +99,20 @@ namespace CheeseTeam
             activeSceneName = sceneName;
 
             // Extract minigame class from loaded objects
-            Minigame minigame = (Minigame)FindObjectOfType(typeof(Minigame));
+            minigame = (Minigame)FindObjectOfType(typeof(Minigame));
             if (minigame)
             {
                 activeMinigame = minigame;
                 // Subscribe to game events
                 minigame.OnGameWin += OnMinigameWon;
                 minigame.OnGameLose += OnMinigameLost;
-                //minigame.Setup(difficulty++);
+
                 yield return new WaitUntil(()=>minigame.Setup(difficulty++));
-                LoadingScreen.instance.FadeScreen(false,2f,minigame.StartGame);
+                LoadingScreen.instance.FadeScreen(false,1f,()=>
+                {
+                    StartTimer();
+                    minigame.StartGame();
+                });
             }
             else 
             {
@@ -78,12 +121,64 @@ namespace CheeseTeam
 
         }
 
-        void OnMinigameWon() {
+        void OnMinigameWon()
+        {
+            isPlaying = false;
             LoadRandomScene();
         }
 
-        void OnMinigameLost() {
-            LoadRandomScene();
+        void OnMinigameLost()
+        {
+            isPlaying = false;
+            ReduceLife();
+            if (life > 0)
+            {
+                LoadRandomScene();
+            }
+            else
+            {
+                Debug.Log("Game Over");
+                GameOver();
+            }
+        }
+
+        void ToggleUI(bool endState)
+        {
+            HeartParent.SetActive(endState);
+            Timer.gameObject.SetActive(endState);
+        }
+
+        public void ResetLife()
+        {
+            life = HeartImages.Length;
+            for (int i = 0; i < HeartImages.Length; i++)
+            {
+                HeartImages[i].enabled = true;
+            }
+        }
+
+        void ReduceLife()
+        {
+            life = Mathf.Clamp(life - 1, 0, HeartImages.Length);
+            HeartImages[life].enabled = false;
+        }
+
+        void GameOver()
+        {
+            isPlaying = false;
+        }
+
+        void StartTimer()
+        {
+            isPlaying = true;
+            currentTimer = maxTime;
+            Timer.text = currentTimer.ToString("00");
+        }
+
+        void TimerEnd()
+        {
+            isPlaying = false;
+            minigame.TimerEnd();
         }
     }
 

@@ -5,7 +5,10 @@ Shader "SG/Fade"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+		_Logo("Logo", 2D) = "white" {}
 		_Fade ("Fade Amount", Range(-.1,1.1)) = 0.0
+		_Resolution("Resolution", Vector)=(0,0,0,0)
+		
     }
     SubShader
     {
@@ -37,8 +40,12 @@ Shader "SG/Fade"
             };
 
             sampler2D _MainTex;
+			sampler2D _FadeTexture;
+            sampler2D _Logo;
             float4 _MainTex_ST;
 			float _Fade;
+
+			float2 _Resolution;
 
             v2f vert (appdata v)
             {
@@ -50,9 +57,15 @@ Shader "SG/Fade"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv);
-				if(col.b>=_Fade)return float4(0,0,0,0);
-                return float4(0,0,0,1);
+                fixed4 col = tex2D(_FadeTexture, i.uv);
+                if(col.b>=_Fade)return float4(0,0,0,0);
+				float ratio = (_Resolution.x / _Resolution.y);
+				i.uv.x *= ratio;// float2(1.0, _VideoResolution.x / _VideoResolution.y);
+				i.uv.x -= .22*ratio;
+				fixed4 logo = tex2D(_Logo, i.uv);
+				fixed4 ret = fixed4(logo.r, logo.g, logo.b, 1);
+				if (logo.a == 0)ret.rgb = float3(0.5, 0.5, 0.5);
+                return ret;
             }
             ENDCG
         }
