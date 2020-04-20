@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace CheeseTeam {
@@ -25,10 +26,11 @@ namespace CheeseTeam {
         public Sprite[] dragZoneTextures;
 
 
-        public override void Setup(int difficulty) {
+        public override bool Setup(int difficulty) {
             base.Setup(difficulty);
             organs = new List<Organ>();
             dragZones = new List<DragZone>();
+            return true;
         }
 
         public override void StartGame() {

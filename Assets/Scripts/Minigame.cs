@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,7 +24,11 @@ namespace CheeseTeam
             }
         }
 
-        public virtual void Setup(int difficulty) => this.difficulty = difficulty;
+        public virtual bool Setup(int difficulty)
+        {
+            this.difficulty = difficulty;
+            return true;
+        }
 
         public virtual void StartGame() { }
 

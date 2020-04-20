@@ -64,8 +64,8 @@ namespace CheeseTeam
                 // Subscribe to game events
                 minigame.OnGameWin += OnMinigameWon;
                 minigame.OnGameLose += OnMinigameLost;
-
-                minigame.Setup(difficulty++);
+                //minigame.Setup(difficulty++);
+                yield return new WaitUntil(()=>minigame.Setup(difficulty++));
                 //TODO: Fade from intermittent screen then
                 minigame.StartGame();
             }

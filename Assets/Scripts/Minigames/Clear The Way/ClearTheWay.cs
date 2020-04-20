@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace CheeseTeam
@@ -21,7 +22,7 @@ namespace CheeseTeam
 
         private bool isPlaying = false;
 
-        public override void Setup(int difficulty)
+        public override bool Setup(int difficulty)
         {
             if (cam == null) cam = Camera.main;
             base.Setup(difficulty);
@@ -31,6 +32,7 @@ namespace CheeseTeam
             SpawnObjects(babyStart);
             Baby.Setup(difficulty, dangerousObjects, babyStart);
             Baby.OnDangerousObjectGrabbed = GameLost;
+            return true;
         }
 
         void GameLost()

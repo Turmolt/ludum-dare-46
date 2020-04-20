@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Input = UnityEngine.Input;
@@ -39,13 +40,14 @@ namespace CheeseTeam
         private float redDrainStrength = .0025f;
         private float darkRedDrainStrength = .01f;
 
-        public override void Setup(int difficulty)
+        public override bool Setup(int difficulty)
         {
             base.Setup(difficulty);
             LifeSlider.value = 1f;
             BalanceSlider.value = .5f;
             SetDifficulty();
             RandomizeDelta();
+            return true;
         }
 
         void Update()
