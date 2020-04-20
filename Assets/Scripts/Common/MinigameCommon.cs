@@ -8,8 +8,24 @@ public class MinigameCommon : MonoBehaviour
 {
     public static Vector3 RandomPointOnScreen(Camera cam, float edgePadding)
     {
-        return cam.ScreenToWorldPoint(new Vector3(Random.Range(edgePadding,1.0f-edgePadding) * Screen.width, Random.Range(edgePadding, 1.0f - edgePadding) * Screen.height, 1f));
+        var vector = new Vector3(
+            Random.Range(edgePadding, 1.0f - edgePadding) * Screen.width, 
+            Random.Range(edgePadding, 1.0f - edgePadding) * Screen.height, 
+            1f
+        );
+        return cam.ScreenToWorldPoint(vector);
     }
+
+    public static Vector3 RandomPointOnXYPlane(Vector3 pos, Vector2 range, float edgePadding) {
+        var offX = (range.x) - edgePadding;
+        var offY = (range.y) - edgePadding;
+        return new Vector3(
+            pos.x + Random.Range(-offX, offX),
+            pos.y + Random.Range(-offY, offY),
+            0f
+        );
+    }
+
 
     public static GameObject RaycastFromMouseForTag(string tag, float maxDistance = 1000f)
     {
@@ -57,5 +73,24 @@ public class MinigameCommon : MonoBehaviour
             return hit.collider.GetComponent(seeking);
         }
         return null;
+    }
+
+    public static void DrawGizmoBox(Vector3 point1, Vector3 point2, Vector3 point3, Vector3 point4) {
+        Gizmos.DrawLine(
+            point1,
+            point2
+        );
+        Gizmos.DrawLine(
+            point2,
+            point3
+        );
+        Gizmos.DrawLine(
+            point3,
+            point4
+        );
+        Gizmos.DrawLine(
+            point4,
+            point1
+        );
     }
 }

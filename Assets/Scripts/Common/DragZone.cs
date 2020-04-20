@@ -26,24 +26,32 @@ public class DragZone : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (!tags.Contains(other.tag)) {
-            tags.Add(other.tag);
+        var dragTag = other.GetComponent<DragTag>();
+        if (dragTag == null) return;
+        if (!tags.Contains(dragTag.id)) {
+            tags.Add(dragTag.id);
         }
 
         hasDesiredObject = tags.Contains(desiredObjectTag);
-
-        if (other.tag == desiredObjectTag)
-            DesiredTagEntered(other.tag);
+        if (dragTag.id == desiredObjectTag) {
+            DesiredTagEntered?.Invoke(dragTag.id);
+        }
     }
 
     private void OnTriggerExit(Collider other) {
-        if (tags.Contains(other.tag)) {
-            tags.Remove(other.tag);
+        var dragTag = other.GetComponent<DragTag>();
+        if (dragTag == null) return;
+        if (tags.Contains(dragTag.id)) {
+            tags.Remove(dragTag.id);
         }
 
         hasDesiredObject = tags.Contains(desiredObjectTag);
+        if (dragTag.id == desiredObjectTag)
+            DesiredTagExited?.Invoke(dragTag.id);
+    }
 
-        if (other.tag == desiredObjectTag)
-            DesiredTagExited(other.tag);
+    private void OnDrawGizmos() {
+        Gizmos.color = hasDesiredObject ? new Color(0f, 1.0f, 0f, 0.5f) : new Color(1.0f, 0.0f, 0f, 0.5f);
+        Gizmos.DrawCube(transform.position, transform.localScale);
     }
 }

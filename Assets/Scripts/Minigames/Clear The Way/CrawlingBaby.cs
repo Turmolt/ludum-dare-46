@@ -18,9 +18,15 @@ public class CrawlingBaby : MonoBehaviour
 
     private Camera cam;
 
+    public BabyAnimator BabyAnimator;
+
+    
+
     public void Setup(int difficulty, List<GameObject> objects, Vector3 startPosition)
     {
         if (cam == null) cam = Camera.main;
+
+        BabyAnimator.ToggleAnimation(false);
         this.difficulty = difficulty;
         BabyObject.OnDestinationReached = InstructBaby;
         dangerObjects = objects;
@@ -30,6 +36,7 @@ public class CrawlingBaby : MonoBehaviour
 
     public void StartMoving()
     {
+        BabyAnimator.ToggleAnimation(true);
         BabyObject.StartMoving(difficulty, RandomDangerousObjectPosition());
     }
 

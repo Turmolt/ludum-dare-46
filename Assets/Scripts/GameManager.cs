@@ -89,6 +89,8 @@ namespace CheeseTeam
     {
         public static string[] Minigames = {
         "Clear The Way",
+        "Operation",
+        "Tight Rope"
         };
 
         private List<string> bagOfGames = new List<string>();

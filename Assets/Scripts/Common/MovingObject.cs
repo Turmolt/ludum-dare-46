@@ -44,7 +44,10 @@ public class MovingObject : MonoBehaviour
         if (moving)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-            transform.LookAt(targetPosition);
+            var dir = transform.position - targetPosition;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            //transform.eulerAngles = transform.eulerAngles.z();
             if (transform.position == targetPosition)
             {
                 if (OnDestinationReached == null) moving = false;

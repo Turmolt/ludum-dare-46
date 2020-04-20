@@ -12,7 +12,7 @@ namespace CheeseTeam
         public GameObject DangerObjectParent;
         private List<GameObject> dangerousObjects = new List<GameObject>();
 
-        private int baseNumber = 10;
+        private int baseNumber = 15;
         private float babyBuffer = 3.0f;
 
         private DraggableObject grabbedObject;
@@ -24,13 +24,13 @@ namespace CheeseTeam
         public override void Setup(int difficulty)
         {
             if (cam == null) cam = Camera.main;
+            base.Setup(difficulty);
 
             isPlaying = false;
             Vector3 babyStart = MinigameCommon.RandomPointOnScreen(cam, .25f).xy(Baby.BabyObject.transform.position.z);
             SpawnObjects(babyStart);
             Baby.Setup(difficulty, dangerousObjects, babyStart);
             Baby.OnDangerousObjectGrabbed = GameLost;
-            base.Setup(difficulty);
         }
 
         void GameLost()
@@ -73,18 +73,17 @@ namespace CheeseTeam
                 grabbedObject = null;
             }
         }
-
+        
         void SpawnObjects(Vector3 babyStart)
         {
-            int numberOfObjects = (int)(baseNumber + (difficulty / 3.0f)), num = dangerousObjects.Count, difference = numberOfObjects- dangerousObjects.Count;
+            int numberOfObjects = (int)(baseNumber + difficulty), difference = numberOfObjects- dangerousObjects.Count;
         
-            for (int i = 0; i < numberOfObjects; i++)
+            for (int i = 0; i < baseNumber+difficulty/2; i++)
             {
-                var needAdditional = (i < difference);
-                GameObject newObject = needAdditional ? Instantiate(DangerousObjectPrefabs[Random.Range(0, DangerousObjectPrefabs.Length)], DangerObjectParent.transform) : dangerousObjects[i];
+                GameObject newObject = Instantiate(DangerousObjectPrefabs[Random.Range(0, DangerousObjectPrefabs.Length)], DangerObjectParent.transform);
                 newObject.transform.position = RandomDangerObjectPosition(babyStart);
-                newObject.transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-                if(needAdditional) dangerousObjects.Add(newObject);
+                newObject.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
+                dangerousObjects.Add(newObject);
             }
         
         }
@@ -98,6 +97,13 @@ namespace CheeseTeam
             {
                 var movement = Vector3.Normalize(babyPosition - point) * (moveAwayDist + Random.Range(0f, 2f));
                 point -= movement;
+                var screenPoint = cam.WorldToScreenPoint(point);
+
+                if (screenPoint.x < 0 || screenPoint.y < 0 || screenPoint.x>Screen.width || screenPoint.y > Screen.height)
+                {
+                    //recalculate?
+                    point = RandomDangerObjectPosition(babyPosition);
+                }
             }
             return point;
         }
