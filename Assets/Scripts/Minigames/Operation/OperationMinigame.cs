@@ -53,10 +53,11 @@ namespace CheeseTeam {
                 // Create drag zone for organ
                 var pos = MinigameCommon.RandomPointOnXYPlane(dragZoneSpawnCenter.position, dragZoneSpawnRange, 1f);
                 // Keep assigning the position until we don't collide with any other drag zones
-                while (true) {
+                int guard = 0;
+                while (guard < 1000) {
                     var hasCollision = false;
                     foreach (var zone in dragZones) {
-                        if (Vector3.Distance(zone.transform.position, pos) < 1.414f) {
+                        if (Vector3.Distance(zone.transform.position, pos) < Mathf.Sqrt(2 * organScale)) {
                             hasCollision = true;
                         }
                     }
@@ -65,6 +66,7 @@ namespace CheeseTeam {
                     } else {
                         break;
                     }
+                    guard++;
                 }
                 var dragZone = MakeDragZone(desiredTag, pos);
                 dragZone.gameObject.AttachSprite(dragZoneTextures[organIndex], 40);
@@ -103,6 +105,7 @@ namespace CheeseTeam {
         Organ MakeOrgan(string name, Vector3 pos) {
             var obj = Instantiate(organPrefab, pos, Quaternion.identity);
             obj.name = name;
+            obj.transform.localScale = new Vector3(organScale, organScale, organScale);
             obj.GetComponent<DragTag>().id = name;
             return obj.GetComponent<Organ>();
         }
@@ -110,6 +113,7 @@ namespace CheeseTeam {
         DragZone MakeDragZone(string name, Vector3 pos) {
             var obj = Instantiate(dragZonePrefab, pos, Quaternion.identity);
             obj.name = name;
+            obj.transform.localScale = new Vector3(organScale, organScale, organScale);
             var zone = obj.GetComponent<DragZone>();
             zone.desiredObjectTag = name;
             return zone;

@@ -686,7 +686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpawnedOrgans: 5
-  organScale: 0.8
+  organScale: 1.5
   interOrganSpacing: 0.125
   organPrefab: {fileID: 8153949942434876404, guid: ecc53e6de6cae4bcfb1530dec63a8300,
     type: 3}
