@@ -45,7 +45,7 @@ namespace CheeseTeam {
             dragZones = new List<DragZone>();
 
             // Override cursors
-            Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.ForceSoftware);
+            // Cursor.SetCursor(mouseCursor, new Vector2(100.25f, -100.25f), CursorMode.ForceSoftware);
 
             // Handle difficulty
             var step = (maxOrganScale - minOrganScale) / (maxDifficulty / difficultiesPerStep);
@@ -145,7 +145,7 @@ namespace CheeseTeam {
         }
 
         void OnDestroy() {
-            Cursor.SetCursor(null, Vector3.zero, CursorMode.Auto);
+            // Cursor.SetCursor(null, Vector3.zero, CursorMode.Auto);
         }
 
         Organ MakeOrgan(string name, Vector3 pos) {
