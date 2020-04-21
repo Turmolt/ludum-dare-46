@@ -107,7 +107,11 @@ namespace CheeseTeam
                 minigame.OnGameWin += OnMinigameWon;
                 minigame.OnGameLose += OnMinigameLost;
 
+
                 yield return new WaitUntil(()=>minigame.Setup(difficulty++));
+
+                ResetTimer();
+
                 LoadingScreen.instance.FadeScreen(false,1f,()=>
                 {
                     StartTimer();
@@ -183,6 +187,12 @@ namespace CheeseTeam
         void StartTimer()
         {
             isPlaying = true;
+            currentTimer = maxTime;
+            Timer.text = currentTimer.ToString("00");
+        }
+
+        void ResetTimer()
+        {
             currentTimer = maxTime;
             Timer.text = currentTimer.ToString("00");
         }
