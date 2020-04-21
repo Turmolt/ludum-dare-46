@@ -60,7 +60,7 @@ Shader "SG/Fade"
 				i.uv.x -= .22*ratio;
 				fixed4 logo = tex2D(_Logo, i.uv);
 				fixed4 ret = fixed4(logo.r, logo.g, logo.b, 1);
-				if (logo.a == 0)ret.rgb = float3(0.5, 0.5, 0.5);
+				if (logo.a == 0)ret.rgb = float3(0, 0.6117647, 0.937255);
                 return ret;
             }
             ENDCG
