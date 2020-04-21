@@ -180,6 +180,8 @@ namespace CheeseTeam
         {
             ToggleUI(false);
             ResetLife();
+            activeSceneName = string.Empty;
+            difficulty = 1;
             SceneManager.LoadScene("Menu");
             LoadingScreen.instance.FadeScreen(false, 1.0f, () => { }, true);
         }
