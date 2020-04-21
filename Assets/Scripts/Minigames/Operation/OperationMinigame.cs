@@ -6,6 +6,9 @@ using UnityEngine;
 namespace CheeseTeam {
     public class OperationMinigame : Minigame {
 
+        public AudioClip squish;
+        private AudioSource audioSource;
+
         private bool isPlaying = true;
 
         public float minOrganScale = 0.5f;
@@ -37,6 +40,7 @@ namespace CheeseTeam {
 
         public override bool Setup(int difficulty) {
             base.Setup(difficulty);
+            audioSource = GetComponent<AudioSource>();
             organs = new List<Organ>();
             dragZones = new List<DragZone>();
 
@@ -122,6 +126,7 @@ namespace CheeseTeam {
             if (Input.GetMouseButtonUp(0) && grabbedObject != null) {
                 grabbedObject.InHand = false;
                 grabbedObject = null;
+                PlaySquish();
             }
 
             if (Input.GetMouseButtonUp(0)) {
@@ -156,6 +161,11 @@ namespace CheeseTeam {
             var zone = obj.GetComponent<DragZone>();
             zone.desiredObjectTag = name;
             return zone;
+        }
+
+        private void PlaySquish() {
+            audioSource.volume = 0.5f;
+            audioSource.PlayOneShot(squish);
         }
 
         private void OnDrawGizmos() {
