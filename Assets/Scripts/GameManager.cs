@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Boo.Lang;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -177,7 +177,6 @@ namespace CheeseTeam
             ToggleUI(false);
             ResetLife();
             SceneManager.LoadScene("Menu");
-            Invoke("FadeLossDisplay",0.5f);
             LoadingScreen.instance.FadeScreen(false, 1.0f, () => { }, true);
         }
 
