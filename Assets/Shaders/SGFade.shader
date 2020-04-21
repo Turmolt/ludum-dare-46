@@ -4,11 +4,7 @@ Shader "SG/Fade"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
-		_Logo("Logo", 2D) = "white" {}
 		_Fade ("Fade Amount", Range(-.1,1.1)) = 0.0
-		_Resolution("Resolution", Vector)=(0,0,0,0)
-		
     }
     SubShader
     {

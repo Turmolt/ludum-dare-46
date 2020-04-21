@@ -166,6 +166,19 @@ namespace CheeseTeam
         void GameOver()
         {
             isPlaying = false;
+            LoadingScreen.instance.FadeScreen(true,1.0f, () =>
+            {
+                Invoke("ResetGame",5.0f);
+            }, true);
+        }
+
+        void ResetGame()
+        {
+            ToggleUI(false);
+            ResetLife();
+            SceneManager.LoadScene("Menu");
+            Invoke("FadeLossDisplay",0.5f);
+            LoadingScreen.instance.FadeScreen(false, 1.0f, () => { }, true);
         }
 
         void StartTimer()

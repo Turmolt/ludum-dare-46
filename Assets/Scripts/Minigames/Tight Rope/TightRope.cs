@@ -40,6 +40,8 @@ namespace CheeseTeam
         private float redDrainStrength = .0025f;
         private float darkRedDrainStrength = .01f;
 
+        public RectTransform Skater;
+
         public override bool Setup(int difficulty)
         {
             base.Setup(difficulty);
@@ -81,6 +83,7 @@ namespace CheeseTeam
             }
 
             BalanceSlider.value = Mathf.Clamp01(BalanceSlider.value + delta);
+            Skater.eulerAngles = Skater.eulerAngles.xy(90-(180*BalanceSlider.value));
             UpdateLife();
         }
 

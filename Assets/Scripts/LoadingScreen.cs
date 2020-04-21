@@ -14,7 +14,8 @@ public class LoadingScreen : MonoBehaviour
 
     public Texture[] FadeTextures;
 
-    public Image Bg;
+    public Texture LoseLogo;
+    public Texture Logo;
 
     void Start()
     {
@@ -23,16 +24,19 @@ public class LoadingScreen : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(this);
-        }else if (instance != this)
+            FadeMaterial.SetFloat("_Fade", 0f);
+        }
+        else if (instance != this)
         {
             Destroy(this);
         }
-        FadeMaterial.SetFloat("_Fade",0f);
     }
 
 
-    public void FadeScreen(bool endValue, float duration, Action OnComplete)
+    public void FadeScreen(bool endValue, float duration, Action OnComplete, bool endScreen=false)
     {
+        FadeMaterial.SetVector("_Resolution",new Vector4(Screen.width,Screen.height,0,0));
+        FadeMaterial.SetTexture("_Logo",endScreen?LoseLogo:Logo);
         FadeMaterial.SetTexture("_FadeTexture",FadeTextures[Random.Range(0,FadeTextures.Length)]);
         FadeMaterial.DOFloat(endValue ? 1.01f:-.01f, "_Fade" ,duration).SetEase(Ease.Linear).OnComplete(()=>OnComplete());
     }

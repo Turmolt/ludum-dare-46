@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Logo:
-        m_Texture: {fileID: 2800000, guid: b8e369a26bc4c42c4994629b1a310fde, type: 3}
+        m_Texture: {fileID: 2800000, guid: 901658d6b2b0248968e976f391445b07, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -81,4 +81,4 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LogoResolution: {r: 1920, g: 1080, b: 0, a: 0}
-    - _Resolution: {r: 1920, g: 1080, b: 0, a: 0}
+    - _Resolution: {r: 2259, g: 1271, b: 0, a: 0}
