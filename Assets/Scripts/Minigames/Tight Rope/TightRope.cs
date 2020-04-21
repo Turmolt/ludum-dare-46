@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using Input = UnityEngine.Input;
@@ -40,6 +41,8 @@ namespace CheeseTeam
         private float darkRedDrainStrength = .01f;
 
         public RectTransform Skater;
+
+        public AudioSource Audio;
 
         public override bool Setup(int difficulty)
         {
@@ -104,6 +107,7 @@ namespace CheeseTeam
         public override void TimerEnd()
         {
             isPlaying = false;
+            Audio.DOFade(0f,1f);
             OnGameWin?.Invoke();
         }
 
@@ -136,6 +140,8 @@ namespace CheeseTeam
         public override void StartGame()
         {
             isPlaying = true;
+            Audio.volume = 1f;
+            Audio.Play();
             base.StartGame();
         }
 

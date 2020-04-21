@@ -20,6 +20,9 @@ public class CrawlingBaby : MonoBehaviour
 
     public BabyAnimator BabyAnimator;
 
+    public AudioSource Audio;
+    public AudioClip BabyGiggle;
+
     public void Setup(int difficulty, List<GameObject> objects, Vector3 startPosition)
     {
         if (cam == null) cam = Camera.main;
@@ -36,6 +39,7 @@ public class CrawlingBaby : MonoBehaviour
     {
         BabyAnimator.ToggleAnimation(true);
         BabyObject.StartMoving(difficulty, RandomDangerousObjectPosition());
+        Audio.PlayOneShot(BabyGiggle);
     }
 
     public void StopMoving()
@@ -52,6 +56,7 @@ public class CrawlingBaby : MonoBehaviour
     public void InstructBaby()
     {
         BabyObject.SetTarget(RandomDangerousObjectPosition());
+        if(!Audio.isPlaying) Audio.PlayOneShot(BabyGiggle);
     }
 
     Vector3 RandomDangerousObjectPosition()
